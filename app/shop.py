@@ -25,8 +25,8 @@ class Shop:
     def give_check(self, customer: Customer) -> str:
         product_cart = customer.product_cart
         total_cost = self.calculate_product_cost(product_cart)
-        current_date = datetime.datetime.now()
-        check = (f"Date: {current_date.strftime("%d/%m/%Y %H:%M:%S")}\n"
+        current_date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        check = (f"Date: {current_date}\n"
                  f"Thanks, {customer.name}, for your purchase!\n"
                  f"You have bought:\n")
         for product, quantity in product_cart.items():
