@@ -7,25 +7,25 @@ from typing import Dict
 
 
 def extract_config_data() -> Dict:
-    with open("app/config.json") as f:
+    with open("config.json", "r") as f:
         data = json.load(f)
     return data
 
 
 def create_car(car_data: Dict) -> Car:
     return Car(
-        brand=car_data["brand"], fuel_consumption=car_data["fuel_consumption"],
+        brand=car_data["brand"],
+        fuel_consumption=car_data["fuel_consumption"],
     )
 
 
 def create_customer(customer_data: Dict) -> Customer:
-    car = create_car(customer_data["car"])
     return Customer(
         name=customer_data["name"],
         product_cart=customer_data["product_cart"],
         location=customer_data["location"],
         money=customer_data["money"],
-        car=car,
+        car=create_car(customer_data["car"]),
     )
 
 
