@@ -1,3 +1,4 @@
+# shop.py
 from dataclasses import dataclass
 import datetime
 from typing import List, Dict
@@ -10,9 +11,6 @@ class Shop:
     name: str
     location: List[int]
     products: Dict[str, int]
-
-    def __hash__(self) -> int:
-        return hash((self.name, tuple(self.location)))
 
     def calculate_product_cost(self, product_cart: dict[str, int]) -> float:
         total_cost = sum(

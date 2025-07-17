@@ -1,3 +1,4 @@
+# main.py
 from app.shop import Shop
 from app.customer import Customer
 from app.car import Car
@@ -51,34 +52,37 @@ def shop_trip() -> None:
     for customer in customers:
         print(f"{customer.name} has {customer.money} dollars")
 
-        trip_costs = {
-            shop: round(
+        # Calculate trip options as list of (shop, cost) tuples
+        trip_options = []
+        for shop in shops:
+            cost = round(
                 customer.calculate_trip_cost(shop.location, fuel_price) * 2
                 + shop.calculate_product_cost(customer.product_cart),
                 2,
             )
-            for shop in shops
-        }
-        for shop, trip_cost in trip_costs.items():
+            trip_options.append((shop, cost))
+
+        # Print costs for each shop
+        for shop, trip_cost in trip_options:
             print(
                 f"{customer.name}'s trip to the {shop.name} costs {trip_cost}",
             )
 
-        affordable_shop = min(
-            (
-                shop
-                for shop, cost in trip_costs.items()
-                if cost <= customer.money
-            ),
-            key=trip_costs.get,
-            default=None,
-        )
-
-        if affordable_shop is not None:
-            print(f"{customer.name} rides to {affordable_shop.name}\n")
-            print(affordable_shop.give_check(customer))
+        # Find affordable shops
+        affordable_candidates = [
+            (shop, cost) for shop, cost in trip_options
+            if cost <= customer.money
+        ]
+        if affordable_candidates:
+            # Find shop with minimum cost
+            best_shop, best_cost = min(
+                affordable_candidates,
+                key=lambda x: x[1]
+            )
+            print(f"{customer.name} rides to {best_shop.name}\n")
+            print(best_shop.give_check(customer))
             print(f"{customer.name} rides home")
-            customer.money -= trip_costs[affordable_shop]
+            customer.money -= best_cost
             print(f"{customer.name} now has {customer.money} dollars\n")
         else:
             print(
